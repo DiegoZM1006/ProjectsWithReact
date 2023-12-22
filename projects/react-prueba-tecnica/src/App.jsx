@@ -1,38 +1,16 @@
-import { useState, useEffect } from 'react'
-import './index.css'
+import { useCatImage } from './hooks/useCatImage'
+import { useCatFact } from './hooks/useCatFact'
 
-const CAT_ENDPOINT_RANDOM_FACT = 'https://catfact.ninja/fact'
-const CAT_ENPOINT_IMAGE_URL = 'https://api.thecatapi.com/v1/images/search'
+import './index.css'
 
 export function App() {
 
-    const [restartButton, setRestartButton] = useState(false)
-    const [fact, setFact] = useState('')
-    const [imageUrl, setImageUrl] = useState('')
+    const { fact, refreshRandomFact } = useCatFact()
+    const { imageUrl } = useCatImage({ fact })
 
-    const updateBtn = () => {
-        setRestartButton(!restartButton)
+    const handleClick = async () => {
+        refreshRandomFact()
     }
-
-    useEffect(() => {
-        fetch(CAT_ENDPOINT_RANDOM_FACT)
-            .then(res => res.json())
-            .then(data => {
-                const { fact } = data
-                setFact(fact)
-            })
-    }, [restartButton])
-
-    useEffect(() => {
-        if (!fact) return
-
-        fetch(CAT_ENPOINT_IMAGE_URL)
-            .then(res => res.json())
-            .then(response => {
-                const url = response[0].url
-                setImageUrl(url)
-            })
-    }, [fact])
 
     return (
         <main className='w-[800px] mx-auto h-[100dvh] justify-center flex place-items-center flex-col gap-5 font-mono'>
@@ -43,7 +21,7 @@ export function App() {
             {fact &&
                 <p>{fact}</p>
             }
-            <button onClick={updateBtn} className='rounded-lg border-[1px] border-[solid] py-2 px-5 text-[1em] font-medium [font-family:inherit] bg-[#1a1a1a] cursor-pointer [transition:border-color_0.25s] hover:border-[#646cff] text-white'>Otro hecho</button>
+            <button onClick={handleClick} className='rounded-lg border-[1px] border-[solid] py-2 px-5 text-[1em] font-medium [font-family:inherit] bg-[#1a1a1a] cursor-pointer [transition:border-color_0.25s] hover:border-[#646cff] text-white'>Otro hecho</button>
         </main>
     )
 }
