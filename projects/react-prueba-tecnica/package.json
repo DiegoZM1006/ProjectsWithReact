@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@playwright/test": "^1.40.1",
+    "@types/node": "^20.10.5",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
     "standard": "^17.1.0",
